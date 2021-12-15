@@ -122,7 +122,9 @@ function $importInput(key) {
 			};
 			payload.content = mmStringOverflow(payload.content, 2000, stringOverflowOption);
 		};
-	};
+	} else {
+		payload.content = $importInput("payload_content");
+	}
 	if (typeof payload.username === "string") {
 		if (payload.username.length === 0) {
 			delete payload.username;
@@ -132,7 +134,9 @@ function $importInput(key) {
 			};
 			payload.username = mmStringOverflow(payload.username, 80, stringOverflowOption);
 		};
-	};
+	} else {
+		payload.username = $importInput("payload_username");
+	}
 	if (typeof payload.avatar_url === "string") {
 		if (payload.avatar_url.length === 0) {
 			delete payload.avatar_url;
