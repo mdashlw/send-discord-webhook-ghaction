@@ -13,6 +13,14 @@ inputs:
     description: "{object} JSON payload."
     required: false
     default: "{}"
+  payload_username:
+    description: "{string} fallback for `payload.username`"
+    required: false
+    default: ""
+  payload_content:
+    description: "{string} fallback for `payload.content`"
+    required: false
+    default: ""
   files:
     description: "{string[]} Files as attachment."
     required: false
