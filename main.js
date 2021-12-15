@@ -113,6 +113,7 @@ function $importInput(key) {
 	if (typeof payload.$schema !== "undefined") {
 		delete payload.$schema;
 	};
+	payload.content = $importInput("payload_content") || payload.content;
 	if (typeof payload.content === "string") {
 		if (payload.content.length === 0) {
 			delete payload.content;
@@ -122,9 +123,8 @@ function $importInput(key) {
 			};
 			payload.content = mmStringOverflow(payload.content, 2000, stringOverflowOption);
 		};
-	} else {
-		payload.content = $importInput("payload_content");
-	}
+	};
+	payload.username = $importInput("payload_username") || payload.username;
 	if (typeof payload.username === "string") {
 		if (payload.username.length === 0) {
 			delete payload.username;
@@ -134,9 +134,7 @@ function $importInput(key) {
 			};
 			payload.username = mmStringOverflow(payload.username, 80, stringOverflowOption);
 		};
-	} else {
-		payload.username = $importInput("payload_username");
-	}
+	};
 	if (typeof payload.avatar_url === "string") {
 		if (payload.avatar_url.length === 0) {
 			delete payload.avatar_url;
