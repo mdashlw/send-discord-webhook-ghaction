@@ -481,7 +481,7 @@ try {
 					"filename": pathBaseName(fileFullPath),
 					"id": filesIndex
 				});
-				requestBody.append(`files[${filesIndex}]`, fsCreateReadStream(fileFullPath));
+				requestBody.append(`files[${filesIndex}]`, fsCreateReadStream(fileFullPath), pathBaseName(fileFullPath));
 			});
 			requestBody.append("attachments", JSON.stringify(attachments));
 			requestBody.append("payload_json", requestPayloadStringify);
