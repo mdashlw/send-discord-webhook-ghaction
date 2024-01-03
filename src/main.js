@@ -5,7 +5,7 @@ import { StringOverflowTruncator } from "@hugoalh/string-overflow";
 import Color from "color";
 import colorNameList from "color-name-list";
 import { randomInt } from "node:crypto";
-import { createReadStream as fsCreateReadStream } from "node:fs";
+import { createReadStream as fsCreateReadStream, readFileSync as fsReadFileSync } from "node:fs";
 import { access as fsAccess, constants as fsConstants } from "node:fs/promises";
 import { basename as pathBaseName, join as pathJoin } from "node:path";
 import yaml from "yaml";
@@ -473,14 +473,14 @@ try {
 	switch (method) {
 		case "form":
 			requestBody = new FormData();
-			requestHeaders.append("Content-Type", "multipart/form-data");
+			// requestHeaders.append("Content-Type", "multipart/form-data");
 			files.forEach((file, filesIndex) => {
 				const fileFullPath = file;
 				attachments.push({
 					"filename": pathBaseName(fileFullPath),
 					"id": filesIndex
 				});
-				requestBody.append(`files[${filesIndex}]`, fsCreateReadStream(fileFullPath));
+				requestBody.append(`files[${filesIndex}]`, new Blob([fsReadFileSync(fileFullPath)]), pathBaseName(fileFullPath));
 			});
 			// requestBody.append("attachments", JSON.stringify(attachments));
 			requestPayload.attachments = attachments;
