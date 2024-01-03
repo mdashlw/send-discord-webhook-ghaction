@@ -408,7 +408,7 @@ try {
 	}
 	for (const file of files) {
 		try {
-			await fsAccess(pathJoin(ghactionsWorkspaceDirectory, file), fsConstants.R_OK);
+			await fsAccess(file, fsConstants.R_OK);
 		} catch {
 			throw new Error(`File \`${file}\` is not accessible, exist, and/or readable!`);
 		}
@@ -475,7 +475,7 @@ try {
 			requestBody = new FormData();
 			requestHeaders.append("Content-Type", "multipart/form-data");
 			files.forEach((file, filesIndex) => {
-				const fileFullPath = pathJoin(ghactionsWorkspaceDirectory, file);
+				const fileFullPath = file;
 				attachments.push({
 					"filename": pathBaseName(fileFullPath),
 					"id": filesIndex
