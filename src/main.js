@@ -409,7 +409,8 @@ try {
 	for (const file of files) {
 		try {
 			await fsAccess(file, fsConstants.R_OK);
-		} catch {
+		} catch (error) {
+			console.error(error);
 			throw new Error(`File \`${file}\` is not accessible, exist, and/or readable!`);
 		}
 	}
