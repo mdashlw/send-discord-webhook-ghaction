@@ -1,13 +1,13 @@
-import { randomInt } from "node:crypto";
-import { createReadStream as fsCreateReadStream } from "node:fs";
-import { access as fsAccess, constants as fsConstants } from "node:fs/promises";
-import { basename as pathBaseName, join as pathJoin } from "node:path";
 import { debug as ghactionsDebug, error as ghactionsError, getBooleanInput as ghactionsGetBooleanInput, getInput as ghactionsGetInput, setOutput as ghactionsSetOutput, setSecret as ghactionsSetSecret } from "@actions/core";
 import { create as ghactionsGlob } from "@actions/glob";
 import { isJSON } from "@hugoalh/advanced-determine";
 import { StringOverflowTruncator } from "@hugoalh/string-overflow";
 import Color from "color";
 import colorNameList from "color-name-list";
+import { randomInt } from "node:crypto";
+import { createReadStream as fsCreateReadStream } from "node:fs";
+import { access as fsAccess, constants as fsConstants } from "node:fs/promises";
+import { basename as pathBaseName, join as pathJoin } from "node:path";
 import yaml from "yaml";
 console.log("Initialize.");
 const iso8601RegExp = /^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ$/u;
@@ -466,8 +466,7 @@ try {
 	if (threadName.length > 0) {
 		requestPayload.thread_name = threadName;
 	}
-	const requestPayloadStringify = JSON.stringify(requestPayload);
-	ghactionsDebug(`Payload: ${requestPayloadStringify}`);
+	ghactionsDebug(`Payload: ${JSON.stringify(requestPayload)}`);
 	const requestQuery = discordWebhookQuery.toString();
 	let requestBody;
 	const attachments = [];
@@ -481,13 +480,14 @@ try {
 					"filename": pathBaseName(fileFullPath),
 					"id": filesIndex
 				});
-				requestBody.append(`files[${filesIndex}]`, fsCreateReadStream(fileFullPath), pathBaseName(fileFullPath));
+				requestBody.append(`files[${filesIndex}]`, fsCreateReadStream(fileFullPath));
 			});
-			requestBody.append("attachments", JSON.stringify(attachments));
-			requestBody.append("payload_json", requestPayloadStringify);
+			// requestBody.append("attachments", JSON.stringify(attachments));
+			requestPayload.attachments = attachments;
+			requestBody.append("payload_json", JSON.stringify(requestPayload));
 			break;
 		case "json":
-			requestBody = requestPayloadStringify;
+			requestBody = JSON.stringify(requestPayload);
 			requestHeaders.append("Content-Type", "application/json");
 			break;
 		default:
